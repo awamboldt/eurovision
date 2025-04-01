@@ -1,2 +1,2 @@
-select *
-from {{source('extracted_data', 'votes')}}
+SELECT *
+FROM {{source('extracted_data', 'votes')}}
