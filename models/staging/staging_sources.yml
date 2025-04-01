@@ -1,6 +1,5 @@
 version: 2
-  sources:
-    
+  sources: 
   - name: extracted_data
     schema: believe_in_all_butts
     tables:
