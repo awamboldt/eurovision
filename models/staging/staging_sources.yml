@@ -8,3 +8,7 @@ version: 2
       - name: contestants_enhanced
       - name: songs
       - name: votes
+  - name: flights_data
+    schema: public
+    tables:
+      - name: flights
