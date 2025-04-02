@@ -9,7 +9,8 @@ WITH relationship_time AS
 			from_last_year
 		ELSE 
 			to_last_year END) AS relationship_end
-	FROM {{ref('prep_votes')}}),
+	FROM {{ref('prep_votes')}}
+	WHERE round = 'final'),
 voting_system AS 
 	(SELECT relationship_time.relationship
 		, relationship_time.to_country
@@ -22,6 +23,7 @@ points AS
 	(SELECT prep_votes.relationship
 		, sum(total_points) AS points_earned
 	FROM {{ref('prep_votes')}}
+	WHERE round = 'final'
 	GROUP BY prep_votes.relationship),
 expected AS 
 	(SELECT voting_system.relationship
