@@ -8,7 +8,7 @@ WITH relationship_ratio AS
 	, country_name
 	, AVG(betting_score) AS betting_odds
 	FROM {{ref('prep_betting')}}
-	GROUP BY YEAR, performer, song)
+	GROUP BY YEAR, country_name)
 SELECT ps.*
 	, rr.point_ratio
 	, br.betting_odds
