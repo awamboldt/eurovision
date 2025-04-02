@@ -5,8 +5,7 @@ WITH relationship_ratio AS
     GROUP BY to_country)
 , betting_ratio AS
 	(SELECT YEAR
-	, performer
-	, song
+	, country_name
 	, AVG(betting_score) AS betting_odds
 	FROM {{ref('prep_betting')}}
 	GROUP BY YEAR, performer, song)
@@ -15,4 +14,4 @@ SELECT ps.*
 	, br.betting_odds
 FROM {{ref('prep_songs')}} AS ps
 JOIN relationship_ratio AS rr ON ps.country = rr.to_country
-JOIN betting_ratio AS br ON ((ps.YEAR = br.YEAR) AND (ps.song_name = br.song))
+JOIN betting_ratio AS br ON ((ps.YEAR = br.YEAR) AND (ps.country = br.country_name))
