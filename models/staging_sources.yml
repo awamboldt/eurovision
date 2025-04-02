@@ -5,5 +5,5 @@ sources:
    tables:
     - name: betting
     - name: contestants_enhanced
-    - name: songs
+    - name: songs_info
     - name: votes
