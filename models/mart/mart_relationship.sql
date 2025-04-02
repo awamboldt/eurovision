@@ -9,7 +9,7 @@ WITH relationship_time AS
 			from_last_year
 		ELSE 
 			to_last_year END) AS relationship_end
-	FROM {{ref('prep_votes')}},
+	FROM {{ref('prep_votes')}}),
 voting_system AS 
 	(SELECT relationship_time.relationship
 		, relationship_time.to_country
