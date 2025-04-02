@@ -1,6 +1,6 @@
 WITH relationship_time AS
-	(SELECT prep_votes.relationship 
-		, prep_votes.to_country
+	(SELECT relationship 
+		, to_country
 		,(CASE WHEN from_start_year >= to_start_year THEN 
 			from_start_year 
 		ELSE 
