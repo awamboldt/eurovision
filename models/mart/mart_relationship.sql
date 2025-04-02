@@ -36,7 +36,8 @@ ratio AS
 		, (expected.new_points+expected.old_points) AS total_possible
 	FROM points
 	JOIN expected ON expected.relationship=points.relationship)
-SELECT ratio.relationship,
-	ratio.to_country,
-	points_earned/total_possible AS point_ratio
+SELECT ratio.relationship
+	, ratio.to_country
+	, (CASE WHEN total_possible > 0 THEN points_earned/total_possible 
+	ELSE 0 END) AS point_ratio
 FROM ratio
