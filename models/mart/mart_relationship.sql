@@ -51,8 +51,7 @@ WITH relationship_time AS
 	ratio AS (SELECT points.points_earned
 		, expected.year
 		, expected.relationship
-		, expect
-		ed.from_country
+		, expected.from_country
 		, expected.to_country
 		, expected.new_points
 		, expected.old_points
