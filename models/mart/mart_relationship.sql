@@ -27,13 +27,13 @@ WITH relationship_time AS
 		FROM {{ref('prep_votes')}}
 		WHERE round='final'
 		GROUP BY prep_votes.relationship),
-	old_points AS (SELECT prep_votes.relationship,
-		, sum(total_points) AS old_points_earned
+	old_points AS (SELECT prep_votes.relationship
+		, SUM(total_points) AS old_points_earned
 		FROM {{ref('prep_votes')}}
 		WHERE (round='final' AND year < 2016)
 		GROUP BY prep_votes.relationship),
 	new_points AS (SELECT prep_votes.relationship
-		, sum(total_points) AS new_points_earned
+		, SUM(total_points) AS new_points_earned
 		FROM {{ref('prep_votes')}}
 		WHERE (round='final' AND year >= 2016)
 		GROUP BY prep_votes.relationship),
