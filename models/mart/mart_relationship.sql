@@ -69,5 +69,5 @@ SELECT ratio.YEAR
 	, (CASE WHEN total_possible > 0 THEN points_earned/total_possible 
 	ELSE 0 END) AS point_ratio
 FROM ratio
-JOIN new_points ON (new_points.relationship = ratio.relationship AND new_points.year = ratio.year)
-JOIN old_points ON (old_points.relationship = ratio.relationship AND old_points.year = ratio.year)
+JOIN new_points ON (new_points.relationship = ratio.relationship)
+JOIN old_points ON (old_points.relationship = ratio.relationship)
