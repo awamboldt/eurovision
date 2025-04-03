@@ -56,17 +56,21 @@ WITH relationship_time AS
 		, expected.new_points
 		, expected.old_points
 		, (expected.new_points+expected.old_points) AS total_possible
+		, old_points.old_points_earned
+		, new_points.new_points_earned
 		FROM points
-		JOIN expected ON expected.relationship=points.relationship)
+		JOIN expected ON expected.relationship=points.relationship
+		JOIN new_points ON (new_points.relationship = points.relationship)
+		JOIN old_points ON (old_points.relationship = points.relationship))
 SELECT ratio.YEAR
 	, ratio.relationship
 	, ratio.to_country
 	, ratio.from_country
-	, (CASE WHEN expected.new_points > 0 THEN new_points.new_points_earned/expected.new_points
+	, (CASE WHEN ratio.new_points > 0 THEN ratio.new_points_earned/ratio.new_points
 	ELSE 0 END) AS new_point_ratio
-	, (CASE WHEN expected.old_points > 0 THEN old_points.old_points_earned/expected.old_points
+	, (CASE WHEN ratio.old_points > 0 THEN ratio.old_points_earned/ratio.old_points
 	ELSE 0 END) AS old_point_ratio
-	, (CASE WHEN total_possible > 0 THEN points_earned/total_possible 
+	, (CASE WHEN ratio.total_possible > 0 THEN ratio.points_earned/ratio.total_possible 
 	ELSE 0 END) AS point_ratio
 FROM ratio
 JOIN new_points ON (new_points.relationship = ratio.relationship)
