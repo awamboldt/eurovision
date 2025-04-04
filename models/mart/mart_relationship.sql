@@ -5,7 +5,6 @@ WITH points AS (SELECT prep_votes.relationship
 		, prep_votes.total_points
 		, (CASE WHEN prep_votes.YEAR >=2016 THEN prep_votes.total_points/24.0
 		ELSE prep_votes.total_points/12.0 END) AS point_ratio
-		, (CASE WHEN point_ratio = 1 THEN 1 ELSE 0 END) AS first_place
 		FROM {{ref('prep_votes')}}
 		WHERE round='final'),
 	average AS (SELECT relationship
