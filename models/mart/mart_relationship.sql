@@ -13,6 +13,5 @@ WITH points AS (SELECT prep_votes.relationship
 		GROUP BY relationship)
 SELECT points.*
 , average.avg_point_ratio
-, average.total_firsts
 FROM points
 JOIN average ON points.relationship = average.relationship
