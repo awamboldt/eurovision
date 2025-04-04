@@ -1,75 +1,17 @@
-WITH relationship_time AS 
-	(SELECT prep_votes.year
-		, prep_votes.relationship 
-		, prep_votes.to_country
+WITH points AS (SELECT prep_votes.relationship
 		, prep_votes.from_country
-		,(CASE WHEN from_start_year >= to_start_year THEN 
-			from_start_year 
-		ELSE 
-			to_start_year END) AS relationship_start
-		,(CASE WHEN from_last_year <= to_last_year THEN 
-			from_last_year
-		ELSE 
-			to_last_year END) AS relationship_end
+		, prep_votes.to_country
+		, prep_votes.YEAR AS contest_year
+		, prep_votes.total_points
+		, (CASE WHEN prep_votes.YEAR >=2016 THEN prep_votes.total_points/24.0
+		ELSE prep_votes.total_points/12.0 END) AS point_ratio
 		FROM {{ref('prep_votes')}}
-		WHERE round = 'final'),
-	voting_system AS (SELECT relationship_time.relationship
-		, relationship_time.to_country
-		, relationship_time.from_country
-		, relationship_time.year
-		,(CASE WHEN ((relationship_time.YEAR >= relationship_start) AND (relationship_time.YEAR <= relationship_end) AND (relationship_time.YEAR>=2016)) THEN 1
-			ELSE 0 END) AS new_voting_system
-		,(CASE WHEN ((relationship_time.YEAR >= relationship_start) AND (relationship_time.YEAR <= relationship_end) AND (relationship_time.YEAR<2016)) THEN 1
-			ELSE 0 END) AS old_voting_system
-		FROM relationship_time),
-	points AS (SELECT prep_votes.relationship
-		, sum(total_points) AS points_earned
-		FROM {{ref('prep_votes')}}
-		WHERE round='final'
-		GROUP BY prep_votes.relationship),
-	old_points AS (SELECT prep_votes.relationship
-		, SUM(total_points) AS old_points_earned
-		FROM {{ref('prep_votes')}}
-		WHERE (round='final' AND year < 2016)
-		GROUP BY prep_votes.relationship),
-	new_points AS (SELECT prep_votes.relationship
-		, SUM(total_points) AS new_points_earned
-		FROM {{ref('prep_votes')}}
-		WHERE (round='final' AND year >= 2016)
-		GROUP BY prep_votes.relationship),
-	expected AS (SELECT voting_system.year
-		, voting_system.relationship
-		, voting_system.from_country
-		, voting_system.to_country
-		, SUM(new_voting_system)*24 AS new_points
-		, SUM(old_voting_system)*12 AS old_points
-		FROM voting_system
-		GROUP BY voting_system.year
-		, voting_system.relationship
-		, voting_system.from_country
-		, voting_system.to_country),
-	ratio AS (SELECT points.points_earned
-		, expected.year
-		, expected.relationship
-		, expected.from_country
-		, expected.to_country
-		, expected.new_points
-		, expected.old_points
-		, (expected.new_points+expected.old_points) AS total_possible
-		, old_points.old_points_earned
-		, new_points.new_points_earned
+		WHERE round='final'),
+	average AS (SELECT relationship
+		, AVG(point_ratio) AS avg_point_ratio
 		FROM points
-		JOIN expected ON expected.relationship=points.relationship
-		JOIN new_points ON (new_points.relationship = points.relationship)
-		JOIN old_points ON (old_points.relationship = points.relationship))
-SELECT ratio.YEAR
-	, ratio.relationship
-	, ratio.to_country
-	, ratio.from_country
-	, (CASE WHEN ratio.new_points > 0 THEN ratio.new_points_earned/ratio.new_points
-	ELSE 0 END) AS new_point_ratio
-	, (CASE WHEN ratio.old_points > 0 THEN ratio.old_points_earned/ratio.old_points
-	ELSE 0 END) AS old_point_ratio
-	, (CASE WHEN ratio.total_possible > 0 THEN ratio.points_earned/ratio.total_possible 
-	ELSE 0 END) AS point_ratio
-FROM ratio
+		GROUP BY relationship)
+SELECT points.*
+, average.avg_point_ratio
+FROM points
+JOIN average ON points.relationship = average.relationship
