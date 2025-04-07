@@ -1,3 +1,3 @@
 select year, semi_final, semi_draw_position, final_draw_position, country, artist_name, song_name, language, style, direct_qualifier_10, gender, main_singers, key, REPLACE(loudness, ' dB', '') AS loudness_db, beats_per_min, energy, danceability, happiness, acousticness, instrumentalness, liveness, speechiness, backing_dancers, backing_singers,
 backing_instruments, instrument_10, qualified_10, final_televote_points, final_jury_points, final_televote_votes, final_jury_votes, final_place, final_total_points, semi_place, semi_televote_points, semi_jury_points, semi_total_points, favourite_10, host_10
-from {{source('extracted_data', 'songs_info')}}
+from {{source('extracted_data', 'songs_info_with_2013')}}
