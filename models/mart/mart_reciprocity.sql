@@ -28,5 +28,5 @@ average AS (SELECT i.*
 	, i.YEAR_RECIPROCITY 
 	, i.original_avg_ratio)
 SELECT *
-,  original_avg_ratio-inverse_avg_ratio AS avg_reciprocity
+,  (original_avg_ratio-inverse_avg_ratio) AS avg_reciprocity
 FROM average
