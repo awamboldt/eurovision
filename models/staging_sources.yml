@@ -7,3 +7,4 @@ sources:
     - name: contestants_enhanced
     - name: songs_info_with_2013
     - name: votes
+    - name: clusters
